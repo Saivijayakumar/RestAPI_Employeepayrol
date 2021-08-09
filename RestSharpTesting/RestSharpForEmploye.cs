@@ -60,5 +60,35 @@ namespace RestSharpTesting
             Assert.AreEqual("Ram Kumar", result.first_name + " " + result.last_name);
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
+        //UC 3:Add Multiple Employees to json server
+        public IRestResponse AddingInJsonServer(JsonObject jsonObject)
+        {
+            RestRequest request = new RestRequest("/employees", Method.POST);
+            request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return response;
+        }
+        [TestMethod]
+        public void UseingPostMethodToAddMultipleEmployees()
+        {
+            //Create Json object for employee1
+            JsonObject employee1 = new JsonObject();
+            employee1.Add("first_name", "Ravi");
+            employee1.Add("last_name", "Kiran");
+            employee1.Add("salary", 6430);
+            //Call Function to Add and change that result to status code
+            HttpStatusCode response1 = AddingInJsonServer(employee1).StatusCode;
+
+            //Create Json object for employee2
+            JsonObject employee2 = new JsonObject();
+            employee2.Add("first_name", "Ramya");
+            employee2.Add("last_name", "K");
+            employee2.Add("salary", 98430);
+            //Call Function to Add and change that result to status code
+            HttpStatusCode response2 = AddingInJsonServer(employee2).StatusCode;
+
+            Assert.AreEqual(response1, HttpStatusCode.Created);
+            Assert.AreEqual(response2, HttpStatusCode.Created);
+        }
     }
 }
