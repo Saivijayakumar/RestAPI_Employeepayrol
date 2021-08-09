@@ -106,5 +106,20 @@ namespace RestSharpTesting
             Console.WriteLine($"Id: {result.id} || Name: {result.first_name + " " + result.last_name} || Salary :{result.salary}");
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
+        // Usecase 5: Delete the employee details using the id
+        [TestMethod]
+        public void UseingDELETEMethodToDeleteEmployeesData()
+        {
+            RestRequest request = new RestRequest("/employees/6", Method.DELETE);
+            IRestResponse response = client.Execute(request);
+            //checking the data after delete
+            IRestResponse getresponse = GetAllEmployees();
+            var result = JsonConvert.DeserializeObject<List<EmployeeModel>>(getresponse.Content);
+            foreach (var element in result)
+            {
+                Console.WriteLine($"Id: {element.id} || Name: {element.first_name + " " + element.last_name} || Salary :{element.salary}");
+            }
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }
