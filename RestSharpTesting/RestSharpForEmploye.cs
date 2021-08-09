@@ -90,5 +90,21 @@ namespace RestSharpTesting
             Assert.AreEqual(response1, HttpStatusCode.Created);
             Assert.AreEqual(response2, HttpStatusCode.Created);
         }
+        //UC 4:Update Values in json server useing id
+        [TestMethod]
+        public void UseingPUTMethodToUpdateEmployeesData()
+        {
+            RestRequest request = new RestRequest("/employees/8", Method.PUT);
+            JsonObject json = new JsonObject();
+            json.Add("first_name", "Pavani");
+            json.Add("last_name", "D");
+            json.Add("salary", 90000);
+            //directly adding json object to request
+            request.AddJsonBody(json);
+            IRestResponse response = client.Execute(request);
+            var result = JsonConvert.DeserializeObject<EmployeeModel>(response.Content);
+            Console.WriteLine($"Id: {result.id} || Name: {result.first_name + " " + result.last_name} || Salary :{result.salary}");
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+        }
     }
 }
